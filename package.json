@@ -1,0 +1,27 @@
+{
+  "name": "angular-swiper",
+  "version": "0.0.1",
+  "description": "Angular directive for nolimits4web/swiper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ksachdeva/angular-swiper.git"
+  },
+  "keywords": [
+    "angular",
+    "swiper"
+  ],
+  "author": "Kapil Sachdeva",
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/ksachdeva/angular-swiper/issues"
+  },
+  "homepage": "https://github.com/ksachdeva/angular-swiper",
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-webserver": "^0.9.0"
+  }
+}

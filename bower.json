@@ -1,0 +1,26 @@
+{
+  "name": "angular-swiper",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ksachdeva/angular-swiper",
+  "authors": [
+    "Kapil Sachdeva <ksachdeva17@gmail.com>"
+  ],
+  "description": "Angular directive for nolimits4web/Swiper javascript library",
+  "main": "dist/angular-swiper.js",
+  "keywords": [
+    "angular",
+    "swiper"
+  ],
+  "license": "Apache",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "swiper": "~3.0.5",
+    "angular": "~1.3.15"
+  }
+}
