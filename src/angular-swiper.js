@@ -7,23 +7,31 @@
         .directive('ksSwiperSlide', SwiperSlide);
 
     /* @ngInject */
-    function SwiperContainer() {
+    function SwiperContainer($log) {
         return {
             restrict: 'E',
             transclude: true,
+            scope: {
+                slidesPerView: '=',
+                spaceBetween: '=',
+                paginationClickable: '=',
+                containerCls: '@',
+                paginationCls: '@',
+                slideCls: '@'
+            },
+            controller: function($scope) {
 
-            controller: function() {
                 this.buildSwiper = function() {
-                    var swiper = new Swiper('.swiper-container', {
-                        pagination: '.swiper-pagination',
-                        slidesPerView: 4,
-                        paginationClickable: true,
-                        spaceBetween: 5
+                    var swiper = new Swiper('.' + $scope.containerCls, {
+                        pagination: '.' + $scope.paginationCls,
+                        slidesPerView: $scope.slidesPerView,
+                        paginationClickable: $scope.paginationClickable,
+                        spaceBetween: $scope.spaceBetween
                     });
                 };
             },
 
-            template: '<div class="swiper-container"><div class="swiper-wrapper" ng-transclude></div><div class="swiper-pagination"></div></div>'
+            template: '<div class="{{containerCls}}"><div class="swiper-wrapper" ng-transclude></div><div class="{{paginationCls}}"></div></div>'
         }
     }
 
@@ -33,8 +41,8 @@
             restrict: 'E',
             require: '^ksSwiperContainer',
             transclude: true,
+            template: '<div ng-transclude></div>',
             replace: true,
-            template: '<div class="swiper-slide" ng-transclude></div>',
             link: function(scope, element, attrs, containerController) {
                 if (scope.$last === true) {
                     $timeout(function() {
