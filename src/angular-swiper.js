@@ -22,12 +22,31 @@
             controller: function($scope) {
 
                 this.buildSwiper = function() {
-                    var swiper = new Swiper('.' + $scope.containerCls, {
-                        pagination: '.' + $scope.paginationCls,
-                        slidesPerView: $scope.slidesPerView,
-                        paginationClickable: $scope.paginationClickable,
-                        spaceBetween: $scope.spaceBetween
-                    });
+
+                    var containerCls = $scope.containerCls || 'unknown';
+
+                    if (containerCls === 'unknown') {
+                        $log.error('container-cls is a required attribute');
+                        return;
+                    }
+
+                    var slidesPerView = $scope.slidesPerView || 2;
+                    var paginationClickable = $scope.paginationClickable || true;
+                    var spaceBetween = $scope.spaceBetween || 0;
+
+                    var params = {
+                        slidesPerView: slidesPerView,
+                        paginationClickable: paginationClickable,
+                        spaceBetween: spaceBetween
+                    };
+
+                    if ($scope.paginationCls) {
+                        params.pagination = '.' + $scope.paginationCls;
+                    }
+
+                    $log.debug(params);
+
+                    var swiper = new Swiper('.' + $scope.containerCls, params);
                 };
             },
 
