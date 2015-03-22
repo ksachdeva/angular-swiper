@@ -25,13 +25,11 @@ And add `ksSwiper` as a dependency for your app:
 angular.module('myApp', ['ksSwiper', ...]);
 ```
 
-
-### Single Knob
 #### Markup
-As an element:
 ```html
 <ks-swiper-container initial-slide="3" loop="false" show-nav-buttons="false" slides-per-view="4" space-between="5" pagination-clickable="false">
     <ks-swiper-slide class="swiper-slide" ng-repeat="s in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
         <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
     </ks-swiper-slide>
 </ks-swiper-container>
+```
