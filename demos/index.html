@@ -41,13 +41,19 @@
     <div ng-app="demoApp">
 
         <div class="myslides">
-
-            <ks-swiper-container loop="true" show-nav-buttons="true" container-cls="swiper-container" pagination-cls="swiper-pagination" slides-per-view="4" space-between="5" pagination-clickable="false">
+            <ks-swiper-container loop="false" show-nav-buttons="false" slides-per-view="4" space-between="5" pagination-clickable="false">
                 <ks-swiper-slide class="swiper-slide" ng-repeat="s in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
                     <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
                 </ks-swiper-slide>
             </ks-swiper-container>
+        </div>
 
+        <div class="myslides">
+            <ks-swiper-container loop="false" show-nav-buttons="true" slides-per-view="4" space-between="5" pagination-clickable="false">
+                <ks-swiper-slide class="swiper-slide" ng-repeat="s in [1,2,3,4,5]">
+                    <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
+                </ks-swiper-slide>
+            </ks-swiper-container>
         </div>
 
     </div>

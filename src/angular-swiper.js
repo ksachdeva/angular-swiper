@@ -6,6 +6,21 @@
         .directive('ksSwiperContainer', SwiperContainer)
         .directive('ksSwiperSlide', SwiperSlide);
 
+    function createUUID() {
+        // http://www.ietf.org/rfc/rfc4122.txt
+        var s = [];
+        var hexDigits = "0123456789abcdef";
+        for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+
+        var uuid = s.join("");
+        return uuid;
+    }
+
     /* @ngInject */
     function SwiperContainer($log) {
         return {
@@ -22,16 +37,9 @@
                 slideCls: '@',
                 direction: '@'
             },
-            controller: function($scope) {
+            controller: function($scope, $element) {
 
                 this.buildSwiper = function() {
-
-                    var containerCls = $scope.containerCls || 'unknown';
-
-                    if (containerCls === 'unknown') {
-                        $log.error('container-cls is a required attribute');
-                        return;
-                    }
 
                     var slidesPerView = $scope.slidesPerView || 1;
                     var slidesPerColumn = $scope.slidesPerColumn || 1;
@@ -47,23 +55,42 @@
                         paginationClickable: paginationClickable,
                         spaceBetween: spaceBetween,
                         direction: direction,
-                        loop: loop
+                        loop: loop,
+                        pagination: '#paginator-' + $scope.swiper_uuid
                     };
 
-                    if ($scope.paginationCls) {
-                        params.pagination = '.' + $scope.paginationCls;
-                    }
-
                     if (showNavButtons === true) {
-                        params.nextButton = '.swiper-button-next';
-                        params.prevButton = '.swiper-button-prev';
+                        params.nextButton = '#nextButton-' + $scope.swiper_uuid;
+                        params.prevButton = '#prevButton-' + $scope.swiper_uuid;
                     }
 
-                    var swiper = new Swiper('.' + $scope.containerCls, params);
+                    var containerCls = $scope.containerCls || '';
+
+                    var swiper = new Swiper($element[0].firstChild, params);
                 };
             },
 
-            template: '<div class="{{containerCls}}"><div class="swiper-wrapper" ng-transclude></div><div class="{{paginationCls}}"></div><div ng-if="showNavButtons" class="swiper-button-next"></div><div ng-if="showNavButtons" class="swiper-button-prev"></div></div>'
+            link: function(scope, element, attrs) {
+
+                var uuid = createUUID();
+
+                scope.swiper_uuid = uuid;
+
+                var paginatorId = "paginator-" + uuid;
+                var prevButtonId = "prevButton-" + uuid;
+                var nextButtonId = "nextButton-" + uuid;
+
+                angular.element(element[0].querySelector('.swiper-pagination'))
+                    .attr('id', paginatorId);
+
+                angular.element(element[0].querySelector('.swiper-button-next'))
+                    .attr('id', nextButtonId);
+
+                angular.element(element[0].querySelector('.swiper-button-prev'))
+                    .attr('id', prevButtonId);
+            },
+
+            template: '<div class="swiper-container {{containerCls}}"><div class="swiper-wrapper" ng-transclude></div><div class="swiper-pagination"></div><div class="swiper-button-next" ng-show="showNavButtons"></div><div class="swiper-button-prev" ng-show="showNavButtons"></div></div>'
         }
     }
 
