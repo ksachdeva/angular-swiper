@@ -11,6 +11,18 @@
         return {
             restrict: 'E',
             transclude: true,
+
+            controller: function() {
+                this.buildSwiper = function() {
+                    var swiper = new Swiper('.swiper-container', {
+                        pagination: '.swiper-pagination',
+                        slidesPerView: 4,
+                        paginationClickable: true,
+                        spaceBetween: 5
+                    });
+                };
+            },
+
             template: '<div class="swiper-container"><div class="swiper-wrapper" ng-transclude></div><div class="swiper-pagination"></div></div>'
         }
     }
@@ -19,18 +31,14 @@
     function SwiperSlide($timeout) {
         return {
             restrict: 'E',
+            require: '^ksSwiperContainer',
             transclude: true,
             replace: true,
             template: '<div class="swiper-slide" ng-transclude></div>',
-            link: function(scope, element, attrs) {
+            link: function(scope, element, attrs, containerController) {
                 if (scope.$last === true) {
                     $timeout(function() {
-                        var swiper = new Swiper('.swiper-container', {
-                            pagination: '.swiper-pagination',
-                            slidesPerView: 4,
-                            paginationClickable: true,
-                            spaceBetween: 5
-                        });
+                        containerController.buildSwiper();
                     }, 0);
                 }
             }
