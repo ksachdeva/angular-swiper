@@ -15,9 +15,12 @@
                 slidesPerView: '=',
                 spaceBetween: '=',
                 paginationClickable: '=',
+                showNavButtons: '=',
+                loop: '=',
                 containerCls: '@',
                 paginationCls: '@',
-                slideCls: '@'
+                slideCls: '@',
+                direction: '@'
             },
             controller: function($scope) {
 
@@ -30,27 +33,37 @@
                         return;
                     }
 
-                    var slidesPerView = $scope.slidesPerView || 2;
+                    var slidesPerView = $scope.slidesPerView || 1;
+                    var slidesPerColumn = $scope.slidesPerColumn || 1;
                     var paginationClickable = $scope.paginationClickable || true;
                     var spaceBetween = $scope.spaceBetween || 0;
+                    var direction = $scope.direction || 'horizontal';
+                    var showNavButtons = $scope.showNavButtons || false;
+                    var loop = $scope.loop || false;
 
                     var params = {
                         slidesPerView: slidesPerView,
+                        slidesPerColumn: slidesPerColumn,
                         paginationClickable: paginationClickable,
-                        spaceBetween: spaceBetween
+                        spaceBetween: spaceBetween,
+                        direction: direction,
+                        loop: loop
                     };
 
                     if ($scope.paginationCls) {
                         params.pagination = '.' + $scope.paginationCls;
                     }
 
-                    $log.debug(params);
+                    if (showNavButtons === true) {
+                        params.nextButton = '.swiper-button-next';
+                        params.prevButton = '.swiper-button-prev';
+                    }
 
                     var swiper = new Swiper('.' + $scope.containerCls, params);
                 };
             },
 
-            template: '<div class="{{containerCls}}"><div class="swiper-wrapper" ng-transclude></div><div class="{{paginationCls}}"></div></div>'
+            template: '<div class="{{containerCls}}"><div class="swiper-wrapper" ng-transclude></div><div class="{{paginationCls}}"></div><div ng-if="showNavButtons" class="swiper-button-next"></div><div ng-if="showNavButtons" class="swiper-button-prev"></div></div>'
         }
     }
 
