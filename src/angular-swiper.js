@@ -32,6 +32,7 @@
                 paginationClickable: '=',
                 showNavButtons: '=',
                 loop: '=',
+                initialSlide: '=',
                 containerCls: '@',
                 paginationCls: '@',
                 slideCls: '@',
@@ -48,6 +49,7 @@
                     var direction = $scope.direction || 'horizontal';
                     var showNavButtons = $scope.showNavButtons || false;
                     var loop = $scope.loop || false;
+                    var initialSlide = $scope.initialSlide || 0;
 
                     var params = {
                         slidesPerView: slidesPerView,
@@ -56,6 +58,7 @@
                         spaceBetween: spaceBetween,
                         direction: direction,
                         loop: loop,
+                        initialSlide: initialSlide,
                         pagination: '#paginator-' + $scope.swiper_uuid
                     };
 
