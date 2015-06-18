@@ -32,6 +32,7 @@
                 paginationClickable: '=',
                 showNavButtons: '=',
                 loop: '=',
+                autoplay: '=',
                 initialSlide: '=',
                 containerCls: '@',
                 paginationCls: '@',
@@ -49,6 +50,7 @@
                     var direction = $scope.direction || 'horizontal';
                     var showNavButtons = $scope.showNavButtons || false;
                     var loop = $scope.loop || false;
+                    var autoplay = $scope.autoplay || 5000;
                     var initialSlide = $scope.initialSlide || 0;
 
                     var params = {
@@ -58,6 +60,7 @@
                         spaceBetween: spaceBetween,
                         direction: direction,
                         loop: loop,
+                        autoplay: autoplay,
                         initialSlide: initialSlide,
                         pagination: '#paginator-' + $scope.swiper_uuid
                     };
