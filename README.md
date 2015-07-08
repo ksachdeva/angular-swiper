@@ -8,6 +8,14 @@ License: Apache
 bower install angular-swiper
 ```
 
+## Development
+
+```
+npm install -g gulp
+npm install
+bower install
+```
+
 ## Usage
 ### Requirements
 
