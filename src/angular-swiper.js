@@ -29,6 +29,7 @@
             scope: {
                 slidesPerView: '=',
                 spaceBetween: '=',
+                paginationIsActive: '=',
                 paginationClickable: '=',
                 showNavButtons: '=',
                 loop: '=',
@@ -45,6 +46,7 @@
 
                     var slidesPerView = $scope.slidesPerView || 1;
                     var slidesPerColumn = $scope.slidesPerColumn || 1;
+                    var paginationIsActive = $scope.paginationIsActive || false;
                     var paginationClickable = $scope.paginationClickable || true;
                     var spaceBetween = $scope.spaceBetween || 0;
                     var direction = $scope.direction || 'horizontal';
@@ -53,17 +55,32 @@
                     var autoplay = $scope.autoplay || 5000;
                     var initialSlide = $scope.initialSlide || 0;
 
-                    var params = {
-                        slidesPerView: slidesPerView,
-                        slidesPerColumn: slidesPerColumn,
-                        paginationClickable: paginationClickable,
-                        spaceBetween: spaceBetween,
-                        direction: direction,
-                        loop: loop,
-                        autoplay: autoplay,
-                        initialSlide: initialSlide,
-                        pagination: '#paginator-' + $scope.swiper_uuid
-                    };
+                    var params;
+                    
+                    if(paginationIsActive === true){
+                        params = {
+                            slidesPerView: slidesPerView,
+                            slidesPerColumn: slidesPerColumn,
+                            paginationClickable: paginationClickable,
+                            spaceBetween: spaceBetween,
+                            direction: direction,
+                            loop: loop,
+                            autoplay: autoplay,
+                            initialSlide: initialSlide,
+                            pagination: '#paginator-' + $scope.swiper_uuid
+                        };
+                    }
+                    else {
+                        params = {
+                            slidesPerView: slidesPerView,
+                            slidesPerColumn: slidesPerColumn,
+                            spaceBetween: spaceBetween,
+                            direction: direction,
+                            loop: loop,
+                            autoplay: autoplay,
+                            initialSlide: initialSlide
+                        };
+                    }
 
                     if (showNavButtons === true) {
                         params.nextButton = '#nextButton-' + $scope.swiper_uuid;
