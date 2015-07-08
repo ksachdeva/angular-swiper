@@ -28,6 +28,7 @@
             transclude: true,
             scope: {
                 slidesPerView: '=',
+                slidesPerColumn: '=',
                 spaceBetween: '=',
                 paginationIsActive: '=',
                 paginationClickable: '=',
@@ -38,58 +39,50 @@
                 containerCls: '@',
                 paginationCls: '@',
                 slideCls: '@',
-                direction: '@'
+                direction: '@',
+                swiper: '=',
+                overrideParameters: '='
             },
             controller: function($scope, $element) {
 
                 this.buildSwiper = function() {
 
-                    var slidesPerView = $scope.slidesPerView || 1;
-                    var slidesPerColumn = $scope.slidesPerColumn || 1;
-                    var paginationIsActive = $scope.paginationIsActive || false;
-                    var paginationClickable = $scope.paginationClickable || true;
-                    var spaceBetween = $scope.spaceBetween || 0;
-                    var direction = $scope.direction || 'horizontal';
-                    var showNavButtons = $scope.showNavButtons || false;
-                    var loop = $scope.loop || false;
-                    var autoplay = $scope.autoplay || 5000;
-                    var initialSlide = $scope.initialSlide || 0;
+                  // directive defaults
+                  var params = {
+                    slidesPerView: $scope.slidesPerView || 1,
+                    slidesPerColumn: $scope.slidesPerColumn || 1,
+                    spaceBetween: $scope.spaceBetween || 0,
+                    direction: $scope.direction || 'horizontal',
+                    loop: $scope.loop || false,
+                    initialSlide: $scope.initialSlide || 0,
+                    showNavButtons: false
+                  };
 
-                    var params;
-                    
-                    if(paginationIsActive === true){
-                        params = {
-                            slidesPerView: slidesPerView,
-                            slidesPerColumn: slidesPerColumn,
-                            paginationClickable: paginationClickable,
-                            spaceBetween: spaceBetween,
-                            direction: direction,
-                            loop: loop,
-                            autoplay: autoplay,
-                            initialSlide: initialSlide,
-                            pagination: '#paginator-' + $scope.swiper_uuid
-                        };
-                    }
-                    else {
-                        params = {
-                            slidesPerView: slidesPerView,
-                            slidesPerColumn: slidesPerColumn,
-                            spaceBetween: spaceBetween,
-                            direction: direction,
-                            loop: loop,
-                            autoplay: autoplay,
-                            initialSlide: initialSlide
-                        };
-                    }
+                  if($scope.autoplay === true){
+                    params = angular.extend({}, params, {
+                      autoplay: true
+                    });
+                  }
 
-                    if (showNavButtons === true) {
-                        params.nextButton = '#nextButton-' + $scope.swiper_uuid;
-                        params.prevButton = '#prevButton-' + $scope.swiper_uuid;
-                    }
+                  if($scope.paginationIsActive === true){
+                    params = angular.extend({}, params, {
+                      paginationClickable: $scope.paginationClickable || true,
+                      pagination: '#paginator-' + $scope.swiper_uuid
+                    });
+                  }
 
-                    var containerCls = $scope.containerCls || '';
+                  if ($scope.showNavButtons === true) {
+                    params.nextButton = '#nextButton-' + $scope.swiper_uuid;
+                    params.prevButton = '#prevButton-' + $scope.swiper_uuid;
+                  }
 
-                    var swiper = new Swiper($element[0].firstChild, params);
+                  if($scope.overrideParameters){
+                    params = angular.extend({}, params, overrideParameters);
+                  }
+
+                  var containerCls = $scope.containerCls || '';
+
+                  $scope.swiper = new Swiper($element[0].firstChild, params);
                 };
             },
 
