@@ -47,42 +47,48 @@
 
                 this.buildSwiper = function() {
 
-                  // directive defaults
-                  var params = {
-                    slidesPerView: $scope.slidesPerView || 1,
-                    slidesPerColumn: $scope.slidesPerColumn || 1,
-                    spaceBetween: $scope.spaceBetween || 0,
-                    direction: $scope.direction || 'horizontal',
-                    loop: $scope.loop || false,
-                    initialSlide: $scope.initialSlide || 0,
-                    showNavButtons: false
-                  };
+                    // directive defaults
+                    var params = {
+                        slidesPerView: $scope.slidesPerView || 1,
+                        slidesPerColumn: $scope.slidesPerColumn || 1,
+                        spaceBetween: $scope.spaceBetween || 0,
+                        direction: $scope.direction || 'horizontal',
+                        loop: $scope.loop || false,
+                        initialSlide: $scope.initialSlide || 0,
+                        showNavButtons: false
+                    };
 
-                  if($scope.autoplay === true){
-                    params = angular.extend({}, params, {
-                      autoplay: true
-                    });
-                  }
+                    if($scope.autoplay === true){
+                        params = angular.extend({}, params, {
+                            autoplay: true
+                        });
+                    }
 
-                  if($scope.paginationIsActive === true){
-                    params = angular.extend({}, params, {
-                      paginationClickable: $scope.paginationClickable || true,
-                      pagination: '#paginator-' + $scope.swiper_uuid
-                    });
-                  }
+                    if($scope.paginationIsActive === true){
+                        params = angular.extend({}, params, {
+                            paginationClickable: $scope.paginationClickable || true,
+                            pagination: '#paginator-' + $scope.swiper_uuid
+                        });
+                    }
 
-                  if ($scope.showNavButtons === true) {
-                    params.nextButton = '#nextButton-' + $scope.swiper_uuid;
-                    params.prevButton = '#prevButton-' + $scope.swiper_uuid;
-                  }
+                    if ($scope.showNavButtons === true) {
+                        params.nextButton = '#nextButton-' + $scope.swiper_uuid;
+                        params.prevButton = '#prevButton-' + $scope.swiper_uuid;
+                    }
 
-                  if($scope.overrideParameters){
-                    params = angular.extend({}, params, overrideParameters);
-                  }
+                    if($scope.overrideParameters){
+                        params = angular.extend({}, params, $scope.overrideParameters);
+                    }
 
-                  var containerCls = $scope.containerCls || '';
+                    var containerCls = $scope.containerCls || '';
 
-                  $scope.swiper = new Swiper($element[0].firstChild, params);
+                    if(angular.isObject($scope.swiper)){
+                        $scope.swiper = new Swiper($element[0].firstChild, params);
+                    }
+                    else {
+                        var swiper = new Swiper($element[0].firstChild, params);
+                    }
+
                 };
             },
 
