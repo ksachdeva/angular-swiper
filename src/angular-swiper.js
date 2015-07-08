@@ -28,7 +28,9 @@
             transclude: true,
             scope: {
                 slidesPerView: '=',
+                slidesPerColumn: '=',
                 spaceBetween: '=',
+                paginationIsActive: '=',
                 paginationClickable: '=',
                 showNavButtons: '=',
                 loop: '=',
@@ -37,42 +39,56 @@
                 containerCls: '@',
                 paginationCls: '@',
                 slideCls: '@',
-                direction: '@'
+                direction: '@',
+                swiper: '=',
+                overrideParameters: '='
             },
             controller: function($scope, $element) {
 
                 this.buildSwiper = function() {
 
-                    var slidesPerView = $scope.slidesPerView || 1;
-                    var slidesPerColumn = $scope.slidesPerColumn || 1;
-                    var paginationClickable = $scope.paginationClickable || true;
-                    var spaceBetween = $scope.spaceBetween || 0;
-                    var direction = $scope.direction || 'horizontal';
-                    var showNavButtons = $scope.showNavButtons || false;
-                    var loop = $scope.loop || false;
-                    var autoplay = $scope.autoplay || 5000;
-                    var initialSlide = $scope.initialSlide || 0;
-
+                    // directive defaults
                     var params = {
-                        slidesPerView: slidesPerView,
-                        slidesPerColumn: slidesPerColumn,
-                        paginationClickable: paginationClickable,
-                        spaceBetween: spaceBetween,
-                        direction: direction,
-                        loop: loop,
-                        autoplay: autoplay,
-                        initialSlide: initialSlide,
-                        pagination: '#paginator-' + $scope.swiper_uuid
+                        slidesPerView: $scope.slidesPerView || 1,
+                        slidesPerColumn: $scope.slidesPerColumn || 1,
+                        spaceBetween: $scope.spaceBetween || 0,
+                        direction: $scope.direction || 'horizontal',
+                        loop: $scope.loop || false,
+                        initialSlide: $scope.initialSlide || 0,
+                        showNavButtons: false
                     };
 
-                    if (showNavButtons === true) {
+                    if($scope.autoplay === true){
+                        params = angular.extend({}, params, {
+                            autoplay: true
+                        });
+                    }
+
+                    if($scope.paginationIsActive === true){
+                        params = angular.extend({}, params, {
+                            paginationClickable: $scope.paginationClickable || true,
+                            pagination: '#paginator-' + $scope.swiper_uuid
+                        });
+                    }
+
+                    if ($scope.showNavButtons === true) {
                         params.nextButton = '#nextButton-' + $scope.swiper_uuid;
                         params.prevButton = '#prevButton-' + $scope.swiper_uuid;
                     }
 
+                    if($scope.overrideParameters){
+                        params = angular.extend({}, params, $scope.overrideParameters);
+                    }
+
                     var containerCls = $scope.containerCls || '';
 
-                    var swiper = new Swiper($element[0].firstChild, params);
+                    if(angular.isObject($scope.swiper)){
+                        $scope.swiper = new Swiper($element[0].firstChild, params);
+                    }
+                    else {
+                        var swiper = new Swiper($element[0].firstChild, params);
+                    }
+
                 };
             },
 
