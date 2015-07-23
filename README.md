@@ -63,7 +63,7 @@ var params = {
 
 ### 3.4 Possible Attributes
 
-The following attributes can be used with this directive. Please see the [Swiper API Documentation](http://www.idangero.us/swiper/api/#.VZ03Je2qpBc) for more information about the type and description of parameters. 
+The following attributes can be used with this directive. Please see the [Swiper API Documentation](http://www.idangero.us/swiper/api/#.VZ03Je2qpBc) for more information about the type and description of parameters.
 
 ```html
 <ks-swiper-container
@@ -78,7 +78,7 @@ The following attributes can be used with this directive. Please see the [Swiper
     initial-slide="0"
     direction="horizontal">
     ...
-</ks-swiper-container>    
+</ks-swiper-container>
 ```
 
 ### 3.5 Override any parameter
@@ -96,17 +96,19 @@ Example:
 
 ### 3.6 Two-Way Binding of Swiper
 
-In some situations it might be useful to access the actual swiper instance. Passing the parent scope will linked it to the model in the directive's isolated scope which is used for the swiper instance. 
+In some situations it might be useful to access the actual swiper instance. Passing the parent scope will linked it to the model in the directive's isolated scope which is used for the swiper instance.
 
-It can also be used to slideTo(index, speed, runCallbacks), slidePrev(runCallbacks, speed), slideNext(runCallbacks, speed) or for callback functions. 
+It can also be used to slideTo(index, speed, runCallbacks), slidePrev(runCallbacks, speed), slideNext(runCallbacks, speed) or for callback functions.
 
 Example Template:
 ```html
+<div ng-controller="TestCtrl">
 <ks-swiper-container swiper="swiper">
     <ks-swiper-slide class="swiper-slide" ng-repeat="s in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
       <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
     </ks-swiper-slide>
 </ks-swiper-container>
+</div>
 ```
 
 Example Controller
