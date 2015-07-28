@@ -149,7 +149,7 @@ angular.module('swiperApp')
 
     $scope.swiper = {};
 
-    $rootScope.onReadySwiper = function (swiper) {
+    $scope.onReadySwiper = function (swiper) {
       
       swiper.on('slideChangeStart', function () {
       
