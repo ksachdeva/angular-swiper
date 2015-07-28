@@ -27,6 +27,7 @@
             restrict: 'E',
             transclude: true,
             scope: {
+                onReady: '&',
                 slidesPerView: '=',
                 slidesPerColumn: '=',
                 spaceBetween: '=',
@@ -81,14 +82,20 @@
                     }
 
                     var containerCls = $scope.containerCls || '';
+                    
+                    var swiper;
 
                     if(angular.isObject($scope.swiper)){
                         $scope.swiper = new Swiper($element[0].firstChild, params);
+                        swiper = $scope.swiper;
                     }
                     else {
-                        var swiper = new Swiper($element[0].firstChild, params);
+                        swiper = new Swiper($element[0].firstChild, params);
                     }
-
+                    
+                    //If specified, calls this function when the swiper object is available
+                    if ($scope.onReady !== undefined)
+                        $scope.onReady({ swiper: swiper });
                 };
             },
 
