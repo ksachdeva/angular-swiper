@@ -124,3 +124,38 @@ angular.module('swiperApp')
 
   });
 ```
+### 3.7 Accessing swiper object after it's created
+
+In some situations, like when you wanna listen to swiper events, is useful to know when the swiper object is created (that occurs after all slides are created).
+
+For that purpose is available the on-ready attribute. You can specify a function to be called when the swiper object is created. In the function you can manipulate the swiperobject, and for example, bind an event. The function must has a paramteter called swiper, refering to swiper object.
+
+Example template
+
+```html
+<div ng-controller="TestCtrl">
+<ks-swiper-container swiper="swiper" on-ready="onReadySwiper(swiper)">
+    <ks-swiper-slide class="swiper-slide" ng-repeat="s in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
+      <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
+    </ks-swiper-slide>
+</ks-swiper-container>
+</div>
+```
+
+Example Controller
+```javascript
+angular.module('swiperApp')
+  .controller('TestCtrl', function($scope){
+
+    $scope.swiper = {};
+
+    $rootScope.onReadySwiper = function (swiper) {
+      
+      swiper.on('slideChangeStart', function () {
+      
+        console.log('slideChangeStart');
+      });
+    };
+
+  });
+```
