@@ -1,9 +1,9 @@
 // package metadata file for Meteor.js
-var packageName = 'aaronroberson:angular-swiper';
+var packageName = 'ksachdeva:angular-swiper';
 var where = 'client';
-var version = '0.2.0';
+var version = '0.2.1';
 var summary = 'Angular directive for iDangero.us Swiper';
-var gitLink = 'https://github.com/aaronroberson/angular-swiper';
+var gitLink = 'https://github.com/ksachdeva/angular-swiper';
 var documentationFile = 'README.md';
 
 // Meta-data
@@ -21,5 +21,5 @@ Package.onUse(function(api) {
   api.use('angular:angular@1.3.0', where)
   api.use('swiper:swiper@3.0.5', where); // Dependencies
 
-  api.addFiles('src/angular-swiper.js', where); // Files in use
+  api.addFiles('dist/angular-swiper.js', where); // Files in use
 }); 
