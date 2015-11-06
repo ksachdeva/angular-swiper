@@ -18,12 +18,12 @@
             height: 100px;
             border-bottom: 1px solid gray;
         }
-
+        
         .swiper-container {
             width: 100%;
             height: 100%;
         }
-
+        
         .swiper-slide {
             text-align: center;
             font-size: 18px;
@@ -57,14 +57,14 @@
         </div>
 
         <div class="myslides" ng-controller="TestCtrl">
-          <ks-swiper-container swiper="swiper" on-ready="onReadySwiper(swiper)">
-              <ks-swiper-slide class="swiper-slide" ng-repeat="s in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
-                <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
-              </ks-swiper-slide>
-          </ks-swiper-container>
-          <!-- this is button that is outside the container
+            <ks-swiper-container autoplay="1000" swiper="swiper" on-ready="onReadySwiper(swiper)">
+                <ks-swiper-slide class="swiper-slide" ng-repeat="s in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
+                    <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
+                </ks-swiper-slide>
+            </ks-swiper-container>
+            <!-- this is button that is outside the container
           and invokes a method in the controller -->
-          <button ng-click="next()">Next</button>
+            <button ng-click="next()">Next</button>
         </div>
 
     </div>
@@ -74,24 +74,19 @@
     <script src="../dist/angular-swiper.js"></script>
 
     <script>
-       var module =  angular.module('demoApp', ['ksSwiper']);
-
-       module.controller('TestCtrl', function($scope){
-         $scope.swiper = {};
-         $scope.next = function(){
-           $scope.swiper.slideNext();
-         };
-
-        $scope.onReadySwiper = function (swiper) {
-          
-          swiper.on('slideChangeStart', function () {
-          
-            console.log('slideChangeStart');
-          });
-        };
-
-       });
-
+        var module = angular.module('demoApp', ['ksSwiper']);
+        module.controller('TestCtrl', function($scope) {
+            $scope.swiper = {};
+            $scope.next = function() {
+                $scope.swiper.slideNext();
+            };
+            $scope.onReadySwiper = function(swiper) {
+                console.log('onReadySwiper');
+                swiper.on('slideChangeStart', function() {
+                    console.log('slideChangeStart');
+                });
+            };
+        });
     </script>
 
 </body>
