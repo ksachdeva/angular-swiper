@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp');
 var server = require('gulp-webserver');
 var ngAnnotate = require('gulp-ng-annotate');

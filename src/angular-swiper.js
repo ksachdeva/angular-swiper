@@ -87,17 +87,18 @@
 
                     var swiper;
 
-                    if(angular.isObject($scope.swiper)){
+                    if (angular.isObject($scope.swiper)) {
                         $scope.swiper = new Swiper($element[0].firstChild, params);
                         swiper = $scope.swiper;
-                    }
-                    else {
+                    } else {
                         swiper = new Swiper($element[0].firstChild, params);
                     }
 
                     //If specified, calls this function when the swiper object is available
                     if ($scope.onReady !== undefined)
-                        $scope.onReady({ swiper: swiper });
+                        $scope.onReady({
+                            swiper: swiper
+                        });
                 };
             },
 
@@ -122,7 +123,7 @@
             },
 
             template: '<div class="swiper-container {{containerCls}}"><div class="parallax-bg" data-swiper-parallax="{{parallaxTransition}}" ng-show="parallax"></div><div class="swiper-wrapper" ng-transclude></div><div class="swiper-pagination {{paginationCls}}"></div><div class="swiper-button-next" ng-show="showNavButtons"></div><div class="swiper-button-prev" ng-show="showNavButtons"></div></div>'
-        }
+        };
     }
 
     /* @ngInject */
@@ -140,7 +141,7 @@
                     }, 0);
                 }
             }
-        }
+        };
     }
 
 })(window, angular, undefined);
