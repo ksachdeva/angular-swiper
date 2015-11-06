@@ -61,13 +61,13 @@
                         showNavButtons: false
                     };
 
-                    if($scope.autoplay === true){
+                    if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
                         params = angular.extend({}, params, {
-                            autoplay: true
+                            autoplay: $scope.autoplay
                         });
                     }
 
-                    if($scope.paginationIsActive === true){
+                    if ($scope.paginationIsActive === true) {
                         params = angular.extend({}, params, {
                             paginationClickable: $scope.paginationClickable || true,
                             pagination: '#paginator-' + $scope.swiper_uuid
@@ -79,12 +79,12 @@
                         params.prevButton = '#prevButton-' + $scope.swiper_uuid;
                     }
 
-                    if($scope.overrideParameters){
+                    if ($scope.overrideParameters) {
                         params = angular.extend({}, params, $scope.overrideParameters);
                     }
 
                     var containerCls = $scope.containerCls || '';
-                    
+
                     var swiper;
 
                     if(angular.isObject($scope.swiper)){
@@ -94,7 +94,7 @@
                     else {
                         swiper = new Swiper($element[0].firstChild, params);
                     }
-                    
+
                     //If specified, calls this function when the swiper object is available
                     if ($scope.onReady !== undefined)
                         $scope.onReady({ swiper: swiper });
