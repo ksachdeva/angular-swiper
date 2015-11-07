@@ -22,7 +22,7 @@
     }
 
     /* @ngInject */
-    function SwiperContainer($log) {
+    function SwiperContainer() {
         return {
             restrict: 'E',
             transclude: true,
@@ -137,7 +137,7 @@
     }
 
     /* @ngInject */
-    function SwiperSlide($timeout) {
+    function SwiperSlide() {
         return {
             restrict: 'E',
             require: '^ksSwiperContainer',
