@@ -46,46 +46,49 @@
                 swiper: '=',
                 overrideParameters: '='
             },
-            controller: function($scope, $element) {
+            controller: function($scope, $element, $timeout) {
+                var self = this;
+                var uuid = createUUID();
 
-                this.buildSwiper = function() {
+                $scope.swiper_uuid = uuid;
 
-                    // directive defaults
-                    var params = {
-                        slidesPerView: $scope.slidesPerView || 1,
-                        slidesPerColumn: $scope.slidesPerColumn || 1,
-                        spaceBetween: $scope.spaceBetween || 0,
-                        direction: $scope.direction || 'horizontal',
-                        loop: $scope.loop || false,
-                        initialSlide: $scope.initialSlide || 0,
-                        showNavButtons: false
-                    };
+                // directive defaults
+                var params = {
+                    slidesPerView: $scope.slidesPerView || 1,
+                    slidesPerColumn: $scope.slidesPerColumn || 1,
+                    spaceBetween: $scope.spaceBetween || 0,
+                    direction: $scope.direction || 'horizontal',
+                    loop: $scope.loop || false,
+                    initialSlide: $scope.initialSlide || 0,
+                    showNavButtons: false
+                };
 
-                    if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
-                        params = angular.extend({}, params, {
-                            autoplay: $scope.autoplay
-                        });
-                    }
+                if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
+                    params = angular.extend({}, params, {
+                        autoplay: $scope.autoplay
+                    });
+                }
 
-                    if ($scope.paginationIsActive === true) {
-                        params = angular.extend({}, params, {
-                            paginationClickable: $scope.paginationClickable || true,
-                            pagination: '#paginator-' + $scope.swiper_uuid
-                        });
-                    }
+                if ($scope.paginationIsActive === true) {
+                    params = angular.extend({}, params, {
+                        paginationClickable: $scope.paginationClickable || true,
+                        pagination: '#paginator-' + $scope.swiper_uuid
+                    });
+                }
 
-                    if ($scope.showNavButtons === true) {
-                        params.nextButton = '#nextButton-' + $scope.swiper_uuid;
-                        params.prevButton = '#prevButton-' + $scope.swiper_uuid;
-                    }
+                if ($scope.showNavButtons === true) {
+                    params.nextButton = '#nextButton-' + $scope.swiper_uuid;
+                    params.prevButton = '#prevButton-' + $scope.swiper_uuid;
+                }
 
-                    if ($scope.overrideParameters) {
-                        params = angular.extend({}, params, $scope.overrideParameters);
-                    }
+                if ($scope.overrideParameters) {
+                    params = angular.extend({}, params, $scope.overrideParameters);
+                }
 
-                    var containerCls = $scope.containerCls || '';
+                var containerCls = $scope.containerCls || '';
 
-                    var swiper;
+                $timeout(function() {
+                    var swiper = null;
 
                     if (angular.isObject($scope.swiper)) {
                         $scope.swiper = new Swiper($element[0].firstChild, params);
@@ -95,30 +98,31 @@
                     }
 
                     //If specified, calls this function when the swiper object is available
-                    if ($scope.onReady !== undefined)
+                    if (!angular.isUndefined($scope.onReady)) {
                         $scope.onReady({
                             swiper: swiper
                         });
-                };
+                    }
+                });
             },
 
             link: function(scope, element, attrs) {
 
-                var uuid = createUUID();
-
-                scope.swiper_uuid = uuid;
+                var uuid = scope.swiper_uuid;
 
                 var paginatorId = "paginator-" + uuid;
                 var prevButtonId = "prevButton-" + uuid;
                 var nextButtonId = "nextButton-" + uuid;
 
-                angular.element(element[0].querySelector('.swiper-pagination'))
+                var containerElement = element[0];
+
+                angular.element(containerElement.querySelector('.swiper-pagination'))
                     .attr('id', paginatorId);
 
-                angular.element(element[0].querySelector('.swiper-button-next'))
+                angular.element(containerElement.querySelector('.swiper-button-next'))
                     .attr('id', nextButtonId);
 
-                angular.element(element[0].querySelector('.swiper-button-prev'))
+                angular.element(containerElement.querySelector('.swiper-button-prev'))
                     .attr('id', prevButtonId);
             },
 
@@ -132,15 +136,8 @@
             restrict: 'E',
             require: '^ksSwiperContainer',
             transclude: true,
-            template: '<div ng-transclude></div>',
-            replace: true,
-            link: function(scope, element, attrs, containerController) {
-                if (scope.$last === true) {
-                    $timeout(function() {
-                        containerController.buildSwiper();
-                    }, 0);
-                }
-            }
+            template: '<div class="swiper-slide" ng-transclude></div>',
+            replace: true
         };
     }
 
