@@ -1,8 +1,8 @@
 {
   "name": "angular-swiper",
-  "version": "0.0.1",
+  "version": "0.2.2",
   "description": "Angular directive for nolimits4web/swiper",
-  "main": "index.js",
+  "main": "dist/angular-swiper.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
