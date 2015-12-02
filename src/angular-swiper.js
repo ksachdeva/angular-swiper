@@ -1,4 +1,4 @@
-(function(window, angular, undefined) {
+(function(window, angular, undefined) {   // the fork of package https://atmospherejs.com/aaronroberson/angular-swiper. modification: add the scroll bar to the swiper.
 
     'use strict';
 
@@ -36,6 +36,7 @@
                 paginationIsActive: '=',
                 paginationClickable: '=',
                 showNavButtons: '=',
+                showScrollBar: '=',    // my own code here
                 loop: '=',
                 autoplay: '=',
                 initialSlide: '=',
@@ -80,6 +81,10 @@
                         params.prevButton = '#prevButton-' + $scope.swiper_uuid;
                     }
 
+                    if ($scope.showScrollBar === true) {   // my own code
+                        params.scrollbar = '#scrollBar-' + $scope.swiper_uuid;
+                    }
+
                     if($scope.overrideParameters){
                         params = angular.extend({}, params, $scope.overrideParameters);
                     }
@@ -111,6 +116,7 @@
                 var paginatorId = "paginator-" + uuid;
                 var prevButtonId = "prevButton-" + uuid;
                 var nextButtonId = "nextButton-" + uuid;
+                var scrollBarId = 'scrollBar-' + uuid;    // my own code here
 
                 angular.element(element[0].querySelector('.swiper-pagination'))
                     .attr('id', paginatorId);
@@ -120,9 +126,12 @@
 
                 angular.element(element[0].querySelector('.swiper-button-prev'))
                     .attr('id', prevButtonId);
+
+                angular.element(element[0].querySelector('.swiper-scrollbar'))
+                    .attr('id', scrollBarId);   // my own code here
             },
 
-            template: '<div class="swiper-container {{containerCls}}"><div class="parallax-bg" data-swiper-parallax="{{parallaxTransition}}" ng-show="parallax"></div><div class="swiper-wrapper {{wrapperCls}}" ng-transclude></div><div class="swiper-pagination {{paginationCls}}"></div><div class="swiper-button-next" ng-show="showNavButtons"></div><div class="swiper-button-prev" ng-show="showNavButtons"></div></div>'
+            template: '<div class="swiper-container {{containerCls}}"><div class="parallax-bg" data-swiper-parallax="{{parallaxTransition}}" ng-show="parallax"></div><div class="swiper-wrapper {{wrapperCls}}" ng-transclude></div><div class="swiper-pagination {{paginationCls}}"></div><div class="swiper-button-next" ng-show="showNavButtons"></div><div class="swiper-button-prev" ng-show="showNavButtons"></div><div class="swiper-scrollbar" ng-show="showScrollBar"></div></div>'
         }
     }
 
