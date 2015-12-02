@@ -36,7 +36,7 @@
                 paginationIsActive: '=',
                 paginationClickable: '=',
                 showNavButtons: '=',
-                showScrollBar: '=',    // my own code here
+                showScrollBar: '=',
                 loop: '=',
                 autoplay: '=',
                 initialSlide: '=',
@@ -49,7 +49,6 @@
                 overrideParameters: '='
             },
             controller: function($scope, $element, $timeout) {
-                var self = this;
                 var uuid = createUUID();
 
                 $scope.swiper_uuid = uuid;
@@ -83,15 +82,13 @@
                     params.prevButton = '#prevButton-' + $scope.swiper_uuid;
                 }
 
-                    if ($scope.showScrollBar === true) {   // my own code
-                        params.scrollbar = '#scrollBar-' + $scope.swiper_uuid;
-                    }
+                if ($scope.showScrollBar === true) {
+                    params.scrollbar = '#scrollBar-' + $scope.swiper_uuid;
+                }
 
                 if ($scope.overrideParameters) {
                     params = angular.extend({}, params, $scope.overrideParameters);
                 }
-
-                var containerCls = $scope.containerCls || '';
 
                 $timeout(function() {
                     var swiper = null;
@@ -112,14 +109,14 @@
                 });
             },
 
-            link: function(scope, element, attrs) {
+            link: function(scope, element) {
 
                 var uuid = scope.swiper_uuid;
 
                 var paginatorId = "paginator-" + uuid;
                 var prevButtonId = "prevButton-" + uuid;
                 var nextButtonId = "nextButton-" + uuid;
-                var scrollBarId = 'scrollBar-' + uuid;    // my own code here
+                var scrollBarId = 'scrollBar-' + uuid;
 
                 var containerElement = element[0];
 
@@ -133,15 +130,16 @@
                     .attr('id', prevButtonId);
 
                 angular.element(element[0].querySelector('.swiper-scrollbar'))
-                    .attr('id', scrollBarId);   // my own code here
+                    .attr('id', scrollBarId);
             },
 
             template: '<div class="swiper-container {{containerCls}}">' +
                 '<div class="parallax-bg" data-swiper-parallax="{{parallaxTransition}}" ng-show="parallax"></div>' +
-                '<div class="swiper-wrapper" ng-transclude></div>' +
+                '<div class="swiper-wrapper {{wrapperCls}}" ng-transclude></div>' +
                 '<div class="swiper-pagination {{paginationCls}}"></div>' +
                 '<div class="swiper-button-next" ng-show="showNavButtons"></div>' +
                 '<div class="swiper-button-prev" ng-show="showNavButtons"></div>' +
+                '<div class="swiper-scrollbar" ng-show="showScrollBar"></div>' +
                 '</div>'
         };
     }
