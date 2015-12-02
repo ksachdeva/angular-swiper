@@ -21,5 +21,5 @@ Package.onUse(function(api) {
   api.use('angular:angular@1.3.0', where)
   api.use('swiper:swiper@3.0.5', where); // Dependencies
 
-  api.addFiles('dist/angular-swiper.js', where); // Files in use
+  api.addFiles('src/angular-swiper.js', where); // Files in use
 }); 
