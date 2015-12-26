@@ -104,8 +104,8 @@
                     if(!angular.isUndefined($scope.currentSlide)){
                       swiper.on('transitionEnd', function(){
                         $timeout(function(){
-                          $scope.currentSlide = Math.abs(swiper.progress);
-                        });                        
+                          $scope.currentSlide = Math.abs(swiper.activeIndex);
+                        });
                       });
                     }
 
