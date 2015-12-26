@@ -46,7 +46,8 @@
                 slideCls: '@',
                 direction: '@',
                 swiper: '=',
-                overrideParameters: '='
+                overrideParameters: '=',
+                currentSlide: '='
             },
             controller: function($scope, $element, $timeout) {
                 var uuid = createUUID();
@@ -98,6 +99,12 @@
                         swiper = $scope.swiper;
                     } else {
                         swiper = new Swiper($element[0].firstChild, params);
+                    }
+
+                    if(!angular.isUndefined($scope.currentSlide)){
+                      swiper.on('transitionEnd', function(){
+                        $scope.currentSlide = Math.abs(swiper.progress);
+                      });
                     }
 
                     //If specified, calls this function when the swiper object is available
