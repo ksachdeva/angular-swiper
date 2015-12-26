@@ -102,7 +102,7 @@
                     }
 
                     if(!angular.isUndefined($scope.currentSlide)){
-                      swiper.on('transitionEnd', function(){
+                      swiper.on('slideChangeEnd', function(){
                         $timeout(function(){
                           $scope.currentSlide = Math.abs(swiper.activeIndex);
                         });
