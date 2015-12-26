@@ -107,6 +107,12 @@
                       });
                     }
 
+                    $scope.$watch('currentSlide', function(newValue, oldValue){
+                      if  ((!angular.isUndefined(newValue)) && (newValue != oldValue)){
+                        swiper.slideTo(newValue);
+                      }
+                    }, true);
+
                     //If specified, calls this function when the swiper object is available
                     if (!angular.isUndefined($scope.onReady)) {
                         $scope.onReady({
