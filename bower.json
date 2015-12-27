@@ -1,6 +1,6 @@
 {
     "name": "angular-swiper",
-    "version": "0.3.3",
+    "version": "0.3.4-alpha.3",
     "homepage": "https://github.com/ksachdeva/angular-swiper",
     "authors": [
         "Kapil Sachdeva <ksachdeva17@gmail.com>"
@@ -20,7 +20,7 @@
         "tests"
     ],
     "dependencies": {
-        "swiper": "~3.0.5",
+        "swiper": "~3.2.7",
         "angular": ">=1.3"
     }
 }
