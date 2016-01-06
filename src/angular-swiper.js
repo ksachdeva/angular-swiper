@@ -39,6 +39,7 @@
                 showScrollBar: '=',
                 loop: '=',
                 autoplay: '=',
+                speed: '=',
                 initialSlide: '=',
                 containerCls: '@',
                 wrapperCls: '@',
@@ -67,6 +68,12 @@
                 if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
                     params = angular.extend({}, params, {
                         autoplay: $scope.autoplay
+                    });
+                }
+
+                if (!angular.isUndefined($scope.speed) && typeof $scope.speed === 'number') {
+                    params = angular.extend({}, params, {
+                        speed: $scope.speed
                     });
                 }
 
