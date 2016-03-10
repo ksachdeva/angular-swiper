@@ -22,6 +22,8 @@ bower install
 Add `<script>`s to your `html` files for [angular](https://github.com/angular/bower-angular) and angular-swiper:
 
 ```html
+    <link rel="stylesheet" href="bower_components/swiper/dist/css/swiper.min.css">
+    
     <script src="../bower_components/swiper/dist/js/swiper.js"></script>
     <script src="../bower_components/angular/angular.js"></script>
     <script src="../dist/angular-swiper.js"></script>
