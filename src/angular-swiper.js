@@ -124,7 +124,27 @@
 
                 $scope.$on('$destroy', function () {
                     swiperInstance.destroy(true);
+                    console.log('controller destroyed');
                 });
+                console.log('controller created');
+
+                function newSlideLinked(iElement) {
+                    if (swiperInstance !== undefined) {
+                        //check for prepend
+                        //element has index in $scope.$index
+                        var newElementIndex = iElement.scope().$index;
+                        if (newElementIndex <= swiperInstance.activeIndex) {
+                            //we have a new prepended slide
+                            swiperInstance.slideNext(false, 0);
+                        }
+                        swiperInstance.update(); //updateTranslate defaults to false
+                        console.log('Linked slide: ', iElement);
+                    }
+                }
+
+                return {
+                    newSlideLinked: newSlideLinked
+                }
             },
 
             link: function(scope, element) {
@@ -149,6 +169,7 @@
 
                 angular.element(element[0].querySelector('.swiper-scrollbar'))
                     .attr('id', scrollBarId);
+                console.log('link complete');
             },
 
             template: '<div class="swiper-container {{containerCls}}">' +
@@ -158,7 +179,8 @@
                 '<div class="swiper-button-next" ng-show="showNavButtons"></div>' +
                 '<div class="swiper-button-prev" ng-show="showNavButtons"></div>' +
                 '<div class="swiper-scrollbar" ng-show="showScrollBar"></div>' +
-                '</div>'
+                '</div>',
+            replace: false //so do not forget to add CSS class for this directive tag
         };
     }
 
@@ -169,7 +191,10 @@
             require: '^ksSwiperContainer',
             transclude: true,
             template: '<div class="swiper-slide" ng-transclude></div>',
-            replace: true
+            replace: true,
+            link: function link(scope, iElement, iAttrs, controller) {
+                controller.newSlideLinked(iElement);
+            }
         };
     }
 
