@@ -37,11 +37,13 @@
                 paginationClickable: '=',
                 showNavButtons: '=',
                 showScrollBar: '=',
+                keyboardControl: '@',
                 loop: '=',
                 autoplay: '=',
                 initialSlide: '=',
                 containerCls: '@',
                 wrapperCls: '@',
+                pagination: '@',
                 paginationCls: '@',
                 slideCls: '@',
                 direction: '@',
@@ -50,6 +52,7 @@
             },
             controller: function($scope, $element, $timeout) {
                 var uuid = createUUID();
+                var swiperInstance;
 
                 $scope.swiper_uuid = uuid;
 
@@ -59,9 +62,11 @@
                     slidesPerColumn: $scope.slidesPerColumn || 1,
                     spaceBetween: $scope.spaceBetween || 0,
                     direction: $scope.direction || 'horizontal',
+                    keyboardControl: $scope.keyboardControl || false,
                     loop: $scope.loop || false,
                     initialSlide: $scope.initialSlide || 0,
-                    showNavButtons: false
+                    showNavButtons: false,
+                    pagination: $scope.pagination
                 };
 
                 if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
@@ -73,7 +78,7 @@
                 if ($scope.paginationIsActive === true) {
                     params = angular.extend({}, params, {
                         paginationClickable: $scope.paginationClickable || true,
-                        pagination: '#paginator-' + $scope.swiper_uuid
+                        pagination: $scope.pagination || '#paginator-' + $scope.swiper_uuid
                     });
                 }
 
@@ -90,8 +95,15 @@
                     params = angular.extend({}, params, $scope.overrideParameters);
                 }
 
+                //delay Swiper creation after linking
                 $timeout(function() {
                     var swiper = null;
+
+                    //find HTMLElements for pagination
+                    if (angular.isString(params.pagination)) {
+                        //if we do not convert here, Swiper will search all the DOM
+                        params.pagination = $(params.pagination, $element[0].firstChild);
+                    }
 
                     if (angular.isObject($scope.swiper)) {
                         $scope.swiper = new Swiper($element[0].firstChild, params);
@@ -100,6 +112,8 @@
                         swiper = new Swiper($element[0].firstChild, params);
                     }
 
+                    swiperInstance = swiper;
+
                     //If specified, calls this function when the swiper object is available
                     if (!angular.isUndefined($scope.onReady)) {
                         $scope.onReady({
@@ -107,6 +121,27 @@
                         });
                     }
                 });
+
+                $scope.$on('$destroy', function () {
+                    swiperInstance.destroy(true);
+                });
+
+                function newSlideLinked(iElement) {
+                    if (swiperInstance !== undefined) {
+                        //check for prepend
+                        //element has index in $scope.$index
+                        var newElementIndex = iElement.scope().$index;
+                        if (newElementIndex <= swiperInstance.activeIndex) {
+                            //we have a new prepended slide
+                            swiperInstance.slideNext(false, 0);
+                        }
+                        swiperInstance.update(); //updateTranslate defaults to false
+                    }
+                }
+
+                return {
+                    newSlideLinked: newSlideLinked
+                }
             },
 
             link: function(scope, element) {
@@ -140,7 +175,8 @@
                 '<div class="swiper-button-next" ng-show="showNavButtons"></div>' +
                 '<div class="swiper-button-prev" ng-show="showNavButtons"></div>' +
                 '<div class="swiper-scrollbar" ng-show="showScrollBar"></div>' +
-                '</div>'
+                '</div>',
+            replace: false //so do not forget to add CSS class for this directive tag
         };
     }
 
@@ -151,7 +187,10 @@
             require: '^ksSwiperContainer',
             transclude: true,
             template: '<div class="swiper-slide" ng-transclude></div>',
-            replace: true
+            replace: true,
+            link: function link(scope, iElement, iAttrs, controller) {
+                controller.newSlideLinked(iElement);
+            }
         };
     }
 

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Simple</title>
+
+    <link rel="stylesheet" href="../bower_components/swiper/dist/css/swiper.css">
+
+    <style>
+        .myslides {
+            background: #eee;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color: #000;
+            margin: 0;
+            padding: 0;
+            height: 150px;
+            border-bottom: 1px solid gray;
+        }
+        .swiper-container-v {
+            background: #eee;
+        }
+
+        ks-swiper-container {
+          width: 100%;
+          height: 100%;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div ng-app="demoApp" ng-controller="MainCtrl">
+      <button ng-click="toggleView()">Toggle View</button>
+      <button ng-click="prependSlide()">Prepend Slide</button>
+      <button ng-click="appendSlide()">Append Slide</button>
+      <button ng-click="appendGroup()">Append Group</button>
+      <div ng-controller="TestCtrl">
+        <div ng-if="mainViewVisible">
+          <h1>1</h1>
+          <div class="myslides">
+              <ks-swiper-container swiper="test.marauder" on-ready="test.onReadySwiper(swiper)" loop="false" show-nav-buttons="false" slides-per-view="1" space-between="50" pagination-is-active="true" pagination=".swiper-pagination-v" pagination-clickable="true" pagination-cls="swiper-pagination-v">
+                  <ks-swiper-slide ng-repeat="s in [1,2,3]">
+                      Slide {{s}}
+                      <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
+                  </ks-swiper-slide>
+              </ks-swiper-container>
+          </div>
+          <h1>2</h1>
+          <div class="myslides" ng-controller="SyncedSwipersCtrl">
+            <ks-swiper-container on-ready="test.onReadySwiper(swiper)" loop="false" keyboard-control="true" show-nav-buttons="false" slides-per-view="1" space-between="50" pagination-is-active="true" pagination=".swiper-pagination-v" pagination-clickable="true" pagination-cls="swiper-pagination-v">
+                <ks-swiper-slide ng-repeat="group in grid.groups">
+                  <ks-swiper-container direction="vertical" initial-slide="1" on-ready="syncedSwipers.onReadySwiper(swiper)" loop="false" keyboard-control="true" show-nav-buttons="false" slides-per-view="1" space-between="50" pagination-is-active="true" pagination=".swiper-pagination-h" pagination-clickable="true" container-cls="swiper-container-v" pagination-cls="swiper-pagination-h">
+                      <ks-swiper-slide ng-repeat="slide in group">
+                          {{slide}}
+                          <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{$index + 1}}.jpg">
+                      </ks-swiper-slide>
+                  </ks-swiper-container>
+                </ks-swiper-slide>
+            </ks-swiper-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/swiper/dist/js/swiper.jquery.js"></script>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../src/angular-swiper.js"></script>
+
+    <script>
+        var module = angular.module('demoApp', ['ksSwiper']);
+        module.controller('TestCtrl', function($scope) {
+            $scope.swiper = {};
+            $scope.next = function() {
+                $scope.swiper.slideNext();
+            };
+            $scope.test = {
+              marauder: {}
+            };
+            $scope.test.onReadySwiper = function(swiper) {
+                console.log('onReadySwiper');
+                swiper.on('slideChangeStart', function() {
+                    console.log('slideChangeStart');
+                });
+            };
+        });
+        module.controller('SyncedSwipersCtrl', function($scope) {
+            $scope.syncedSwipers = {
+                swipers: [],
+                index: -1
+            };
+            var onSlideChangeEnd = function(swiper) {
+              console.log('slide changed to', swiper.activeIndex);
+              var swipers = $scope.syncedSwipers.swipers
+              for (var i = 0; i < swipers.length; ++i) {
+                  if (swiper === swipers[i]) {
+                      //console.log('skipping slider', i);
+                      continue;
+                  }
+                  swipers[i].slideTo(swiper.activeIndex, 0, false); //no-animation and silent
+              }
+              $scope.syncedSwipers.index = swiper.activeIndex;
+            }
+            $scope.syncedSwipers.addSwiper = function(swiper) {
+                $scope.syncedSwipers.swipers.push(swiper);
+                swiper.on('onSlideChangeEnd', onSlideChangeEnd);
+                if ($scope.syncedSwipers.index < 0) {
+                    $scope.syncedSwipers.index = swiper.activeIndex;
+                } else {
+                    //hello new swiper
+                    swiper.slideTo($scope.syncedSwipers.index, 0, false);
+                }
+            };
+            $scope.syncedSwipers.onReadySwiper = function(swiper) {
+                $scope.syncedSwipers.addSwiper(swiper);
+            };
+
+        });
+        module.controller('MainCtrl', function($scope) {
+            $scope.mainViewVisible = true;
+            $scope.grid = {
+                groups: []
+            };
+
+            for(var i = 0; i < 3; ++i) {
+                var slides = [];
+                for(var j = 0; j < 3; ++j) {
+                    var name = 'Group: ' + i + ', Slide: ' + j
+                    slides.push(name);
+                }
+                $scope.grid.groups.push(slides);
+            }
+
+            $scope.toggleView = function() {
+                $scope.mainViewVisible = !$scope.mainViewVisible;
+            };
+            $scope.prependSlide = function() {
+                var slideNum = $scope.grid.groups[0].length;
+                for(var i = 0; i < $scope.grid.groups.length; ++i) {
+                    var name = '(prepended) Group: ' + i + ', Slide: ' + slideNum;
+                    //below triggers recreation of slides!
+                    //$scope.grid.groups[i] = [name].concat($scope.grid.groups[i]);
+                    $scope.grid.groups[i].unshift(name);
+                }
+                console.log('prepended');
+            }
+            $scope.appendSlide = function() {
+                var slideNum = $scope.grid.groups[0].length;
+                for(var i = 0; i < $scope.grid.groups.length; ++i) {
+                    var name = '(appended) Group: ' + i + ', Slide: ' + slideNum;
+                    $scope.grid.groups[i].push(name);
+                }
+                console.log('appended');
+            }
+            $scope.appendGroup = function() {
+                var slideNum = $scope.grid.groups[0].length;
+                var groupName = $scope.grid.groups.length;
+                var group = [];
+                for(var i = 0; i < slideNum; ++i) {
+                    var name = '(New) Group: ' + groupName + ', Slide: ' + i;
+                    group.push(name);
+                }
+                $scope.grid.groups.push(group);
+                console.log('group appended');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

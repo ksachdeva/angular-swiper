@@ -1,5 +1,5 @@
 # angular-swiper
-Directive that wraps nolimits4web/swiper library for AngularJS.
+Directive that wraps [nolimits4web/swiper](https://github.com/nolimits4web/swiper) library for AngularJS.
 License: Apache
 
 ## 1 Installation
@@ -23,7 +23,7 @@ Add `<script>`s to your `html` files for [angular](https://github.com/angular/bo
 
 ```html
     <link rel="stylesheet" href="bower_components/swiper/dist/css/swiper.min.css">
-    
+
     <script src="../bower_components/swiper/dist/js/swiper.js"></script>
     <script src="../bower_components/angular/angular.js"></script>
     <script src="../dist/angular-swiper.js"></script>
@@ -152,9 +152,9 @@ angular.module('swiperApp')
     $scope.swiper = {};
 
     $scope.onReadySwiper = function (swiper) {
-      
+
       swiper.on('slideChangeStart', function () {
-      
+
         console.log('slideChangeStart');
       });
     };
