@@ -112,7 +112,7 @@
                         swiper = new Swiper($element[0].firstChild, params);
                     }
 
-                    swiperInstance = swiper; //MYN TODO make this controller local variable
+                    swiperInstance = swiper;
 
                     //If specified, calls this function when the swiper object is available
                     if (!angular.isUndefined($scope.onReady)) {
@@ -124,9 +124,7 @@
 
                 $scope.$on('$destroy', function () {
                     swiperInstance.destroy(true);
-                    console.log('controller destroyed');
                 });
-                console.log('controller created');
 
                 function newSlideLinked(iElement) {
                     if (swiperInstance !== undefined) {
@@ -138,7 +136,6 @@
                             swiperInstance.slideNext(false, 0);
                         }
                         swiperInstance.update(); //updateTranslate defaults to false
-                        console.log('Linked slide: ', iElement);
                     }
                 }
 
@@ -169,7 +166,6 @@
 
                 angular.element(element[0].querySelector('.swiper-scrollbar'))
                     .attr('id', scrollBarId);
-                console.log('link complete');
             },
 
             template: '<div class="swiper-container {{containerCls}}">' +

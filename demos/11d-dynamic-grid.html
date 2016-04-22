@@ -50,6 +50,7 @@
       <button ng-click="toggleView()">Toggle View</button>
       <button ng-click="prependSlide()">Prepend Slide</button>
       <button ng-click="appendSlide()">Append Slide</button>
+      <button ng-click="appendGroup()">Append Group</button>
       <div ng-controller="TestCtrl">
         <div ng-if="mainViewVisible">
           <h1>1</h1>
@@ -103,7 +104,7 @@
         module.controller('SyncedSwipersCtrl', function($scope) {
             $scope.syncedSwipers = {
                 swipers: [],
-                index: 0
+                index: -1
             };
             var onSlideChangeEnd = function(swiper) {
               console.log('slide changed to', swiper.activeIndex);
@@ -120,7 +121,12 @@
             $scope.syncedSwipers.addSwiper = function(swiper) {
                 $scope.syncedSwipers.swipers.push(swiper);
                 swiper.on('onSlideChangeEnd', onSlideChangeEnd);
-                $scope.syncedSwipers.index = swiper.activeIndex;
+                if ($scope.syncedSwipers.index < 0) {
+                    $scope.syncedSwipers.index = swiper.activeIndex;
+                } else {
+                    //hello new swiper
+                    swiper.slideTo($scope.syncedSwipers.index, 0, false);
+                }
             };
             $scope.syncedSwipers.onReadySwiper = function(swiper) {
                 $scope.syncedSwipers.addSwiper(swiper);
@@ -162,6 +168,17 @@
                     $scope.grid.groups[i].push(name);
                 }
                 console.log('appended');
+            }
+            $scope.appendGroup = function() {
+                var slideNum = $scope.grid.groups[0].length;
+                var groupName = $scope.grid.groups.length;
+                var group = [];
+                for(var i = 0; i < slideNum; ++i) {
+                    var name = '(New) Group: ' + groupName + ', Slide: ' + i;
+                    group.push(name);
+                }
+                $scope.grid.groups.push(group);
+                console.log('group appended');
             }
         });
     </script>
