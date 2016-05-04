@@ -81,7 +81,7 @@
           }
       });
     }
-    angularSwiperController.$inject = ["$scope", "$element", "$timeout"];
+    swiperController.$inject = ["$scope", "$element", "$timeout"];
 
 
     /* @ngInject */
