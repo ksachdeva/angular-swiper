@@ -1,4 +1,4 @@
-(function(window, angular, undefined) {
+(function(window, angular) {
 
     'use strict';
 
@@ -20,6 +20,69 @@
         var uuid = s.join("");
         return uuid;
     }
+
+    function swiperController($scope, $element, $timeout) {
+      var uuid = createUUID();
+
+      $scope.swiper_uuid = uuid;
+
+      // directive defaults
+      var params = {
+          slidesPerView: $scope.slidesPerView || 1,
+          slidesPerColumn: $scope.slidesPerColumn || 1,
+          spaceBetween: $scope.spaceBetween || 0,
+          direction: $scope.direction || 'horizontal',
+          loop: $scope.loop || false,
+          initialSlide: $scope.initialSlide || 0,
+          showNavButtons: false
+      };
+
+      if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
+          params = angular.extend({}, params, {
+              autoplay: $scope.autoplay
+          });
+      }
+
+      if ($scope.paginationIsActive === true) {
+          params = angular.extend({}, params, {
+              paginationClickable: $scope.paginationClickable || true,
+              pagination: '#paginator-' + $scope.swiper_uuid
+          });
+      }
+
+      if ($scope.showNavButtons === true) {
+          params.nextButton = '#nextButton-' + $scope.swiper_uuid;
+          params.prevButton = '#prevButton-' + $scope.swiper_uuid;
+      }
+
+      if ($scope.showScrollBar === true) {
+          params.scrollbar = '#scrollBar-' + $scope.swiper_uuid;
+      }
+
+      if ($scope.overrideParameters) {
+          params = angular.extend({}, params, $scope.overrideParameters);
+      }
+
+      $timeout(function() {
+          var swiper = null;
+
+          if (angular.isObject($scope.swiper)) {
+              $scope.swiper = new Swiper($element[0].firstChild, params);
+              swiper = $scope.swiper;
+          } else {
+              swiper = new Swiper($element[0].firstChild, params);
+          }
+
+          //If specified, calls this function when the swiper object is available
+          if (!angular.isUndefined($scope.onReady)) {
+              $scope.onReady({
+                  swiper: swiper
+              });
+          }
+      });
+    }
+    angularSwiperController.$inject = ["$scope", "$element", "$timeout"];
+
 
     /* @ngInject */
     function SwiperContainer() {
@@ -48,67 +111,7 @@
                 swiper: '=',
                 overrideParameters: '='
             },
-            controller: function($scope, $element, $timeout) {
-                var uuid = createUUID();
-
-                $scope.swiper_uuid = uuid;
-
-                // directive defaults
-                var params = {
-                    slidesPerView: $scope.slidesPerView || 1,
-                    slidesPerColumn: $scope.slidesPerColumn || 1,
-                    spaceBetween: $scope.spaceBetween || 0,
-                    direction: $scope.direction || 'horizontal',
-                    loop: $scope.loop || false,
-                    initialSlide: $scope.initialSlide || 0,
-                    showNavButtons: false
-                };
-
-                if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
-                    params = angular.extend({}, params, {
-                        autoplay: $scope.autoplay
-                    });
-                }
-
-                if ($scope.paginationIsActive === true) {
-                    params = angular.extend({}, params, {
-                        paginationClickable: $scope.paginationClickable || true,
-                        pagination: '#paginator-' + $scope.swiper_uuid
-                    });
-                }
-
-                if ($scope.showNavButtons === true) {
-                    params.nextButton = '#nextButton-' + $scope.swiper_uuid;
-                    params.prevButton = '#prevButton-' + $scope.swiper_uuid;
-                }
-
-                if ($scope.showScrollBar === true) {
-                    params.scrollbar = '#scrollBar-' + $scope.swiper_uuid;
-                }
-
-                if ($scope.overrideParameters) {
-                    params = angular.extend({}, params, $scope.overrideParameters);
-                }
-
-                $timeout(function() {
-                    var swiper = null;
-
-                    if (angular.isObject($scope.swiper)) {
-                        $scope.swiper = new Swiper($element[0].firstChild, params);
-                        swiper = $scope.swiper;
-                    } else {
-                        swiper = new Swiper($element[0].firstChild, params);
-                    }
-
-                    //If specified, calls this function when the swiper object is available
-                    if (!angular.isUndefined($scope.onReady)) {
-                        $scope.onReady({
-                            swiper: swiper
-                        });
-                    }
-                });
-            },
-
+            controller: swiperController,
             link: function(scope, element) {
 
                 var uuid = scope.swiper_uuid;
@@ -155,4 +158,4 @@
         };
     }
 
-})(window, angular, undefined);
+})(window, window.angular);

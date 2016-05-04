@@ -161,3 +161,10 @@ angular.module('swiperApp')
 
   });
 ```
+
+
+## CHANGELOG
+# 2016-May-04 (PRDeving)
+  * explicit injection
+  * argument 'window.angular' instead 'angular'
+  * removed argument 'undefined' -WTF??-
