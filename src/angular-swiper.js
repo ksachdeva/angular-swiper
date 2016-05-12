@@ -150,7 +150,10 @@
             restrict: 'E',
             require: '^ksSwiperContainer',
             transclude: true,
-            template: '<div class="swiper-slide" ng-transclude></div>',
+            scope: {
+              sliderCls: '@',
+            },
+            template: '<div class="swiper-slide {{sliderCls}}" ng-transclude></div>',
             replace: true
         };
     }
