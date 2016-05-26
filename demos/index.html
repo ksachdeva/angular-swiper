@@ -41,7 +41,7 @@
     <div ng-app="demoApp">
 
         <div class="myslides">
-            <ks-swiper-container loop="false" show-nav-buttons="false" slides-per-view="4" space-between="5" pagination-clickable="false">
+            <ks-swiper-container slides-per-view="2">
                 <ks-swiper-slide ng-repeat="s in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
                     <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
                 </ks-swiper-slide>
@@ -84,7 +84,11 @@
 
     <script>
         var module = angular.module('demoApp', ['ksSwiper']);
-        module.controller('TestCtrl', function($scope) {
+        module
+        .config(function(angularSwiperConfigProvider) {
+            angularSwiperConfigProvider.setSlidesPerView(7);
+        })
+        .controller('TestCtrl', function($scope) {
             $scope.swiper = {};
             $scope.next = function() {
                 $scope.swiper.slideNext();

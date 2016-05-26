@@ -63,20 +63,20 @@
         };
 
         /////
-        function controllerFn($scope, $element, $timeout) {
+        function controllerFn($scope, $element, $timeout, angularSwiperConfig) {
             var uuid = createUUID();
 
             $scope.swiper_uuid = uuid;
 
             // directive defaults
             var params = {
-                slidesPerView: $scope.slidesPerView || 1,
-                slidesPerColumn: $scope.slidesPerColumn || 1,
-                spaceBetween: $scope.spaceBetween || 0,
-                direction: $scope.direction || 'horizontal',
-                loop: $scope.loop || false,
-                initialSlide: $scope.initialSlide || 0,
-                showNavButtons: false
+                slidesPerView   : $scope.slidesPerView || angularSwiperConfig.params.slidesPerView,
+                slidesPerColumn : $scope.slidesPerColumn || angularSwiperConfig.params.slidesPerColumn,
+                spaceBetween    : $scope.spaceBetween || angularSwiperConfig.params.spaceBetween,
+                direction       : $scope.direction || angularSwiperConfig.params.direction,
+                loop            : $scope.loop || angularSwiperConfig.params.loop,
+                initialSlide    : $scope.initialSlide || angularSwiperConfig.params.initialSlide,
+                showNavButtons  : angularSwiperConfig.params.showNavButtons
             };
 
             if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
