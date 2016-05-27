@@ -1,4 +1,4 @@
-(function(window, angular, undefined) {
+(function(window, angular) {
 
     'use strict';
 
@@ -25,9 +25,15 @@
             this.params[key] = value;
         }
 
+        this.setSwiperParameters = function(objKeys) {
+            for (var key in objKeys) {
+                this.params[key] = objKeys[key];
+            }
+        }
+
         this.$get = function() {
             return this;
         };
     }
 
-})(window, angular, undefined);
+})(window, angular);

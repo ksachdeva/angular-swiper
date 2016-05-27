@@ -21,9 +21,9 @@ module.exports = function(config) {
     files: [
       'bower_components/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      'src/angular-swiper.module.js',
-      'src/angular-swiper.directive.js',
-      'src/angular-swiper.provider.js',
+      'src/**/*.module.js',
+      'src/**/*.directive.js',
+      'src/**/*.provider.js',
       'test/**/*.spec.js'
     ],
 

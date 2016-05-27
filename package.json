@@ -1,6 +1,6 @@
 {
   "name": "angular-swiper",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Angular directive for nolimits4web/swiper",
   "main": "dist/angular-swiper.js",
   "scripts": {
