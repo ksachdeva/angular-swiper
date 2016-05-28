@@ -1,1 +1,231 @@
-!function(e,i,r){"use strict";i.module("ksSwiper",[])}(window,angular,void 0),function(e,i,r){"use strict";function a(){this.params={slidesPerView:1,slidesPerColumn:1,spaceBetween:0,direction:"horizontal",loop:!1,initialSlide:0,showNavButtons:!1},this.setSlidesPerView=function(e){this.params.slidesPerView=e},this.addSwiperParameter=function(e,i){this.params[e]=i},this.$get=function(){return this}}i.module("ksSwiper").provider("angularSwiperConfig",a)}(window,angular,void 0),function(e,i,r){"use strict";function a(){for(var e=[],i="0123456789abcdef",r=0;36>r;r++)e[r]=i.substr(Math.floor(16*Math.random()),1);e[14]="4",e[19]=i.substr(3&e[19]|8,1),e[8]=e[13]=e[18]=e[23]="-";var a=e.join("");return a}function t(){function e(e,r,t,s){var n=a();e.swiper_uuid=n;var o={slidesPerView:e.slidesPerView||s.params.slidesPerView,slidesPerColumn:e.slidesPerColumn||s.params.slidesPerColumn,spaceBetween:e.spaceBetween||s.params.spaceBetween,direction:e.direction||s.params.direction,loop:e.loop||s.params.loop,initialSlide:e.initialSlide||s.params.initialSlide,showNavButtons:s.params.showNavButtons};i.isUndefined(e.autoplay)||"number"!=typeof e.autoplay||(o=i.extend({},o,{autoplay:e.autoplay})),e.paginationIsActive===!0&&(o=i.extend({},o,{paginationClickable:e.paginationClickable||!0,pagination:"#paginator-"+e.swiper_uuid})),e.showNavButtons===!0&&(o.nextButton="#nextButton-"+e.swiper_uuid,o.prevButton="#prevButton-"+e.swiper_uuid),e.showScrollBar===!0&&(o.scrollbar="#scrollBar-"+e.swiper_uuid),e.overrideParameters&&(o=i.extend({},o,e.overrideParameters)),t(function(){var a=null;i.isObject(e.swiper)?(e.swiper=new Swiper(r[0].firstChild,o),a=e.swiper):a=new Swiper(r[0].firstChild,o),i.isUndefined(e.onReady)||e.onReady({swiper:a})})}function r(e,r){var a=e.swiper_uuid,t="paginator-"+a,s="prevButton-"+a,n="nextButton-"+a,o="scrollBar-"+a,l=r[0];i.element(l.querySelector(".swiper-pagination")).attr("id",t),i.element(l.querySelector(".swiper-button-next")).attr("id",n),i.element(l.querySelector(".swiper-button-prev")).attr("id",s),i.element(r[0].querySelector(".swiper-scrollbar")).attr("id",o)}return e.$inject=["$scope","$element","$timeout","angularSwiperConfig"],{restrict:"E",transclude:!0,scope:{onReady:"&",slidesPerView:"=",slidesPerColumn:"=",spaceBetween:"=",parallax:"=",parallaxTransition:"@",paginationIsActive:"=",paginationClickable:"=",showNavButtons:"=",showScrollBar:"=",loop:"=",autoplay:"=",initialSlide:"=",containerCls:"@",wrapperCls:"@",paginationCls:"@",slideCls:"@",direction:"@",swiper:"=",overrideParameters:"="},controller:e,link:r,template:'<div class="swiper-container {{containerCls}}"><div class="parallax-bg" data-swiper-parallax="{{parallaxTransition}}" ng-show="parallax"></div><div class="swiper-wrapper {{wrapperCls}}" ng-transclude></div><div class="swiper-pagination {{paginationCls}}"></div><div class="swiper-button-next" ng-show="showNavButtons"></div><div class="swiper-button-prev" ng-show="showNavButtons"></div><div class="swiper-scrollbar" ng-show="showScrollBar"></div></div>'}}function s(){return{restrict:"E",require:"^ksSwiperContainer",transclude:!0,scope:{sliderCls:"@"},template:'<div class="swiper-slide {{sliderCls}}" ng-transclude></div>',replace:!0}}i.module("ksSwiper").directive("ksSwiperContainer",t).directive("ksSwiperSlide",s)}(window,angular,void 0);
+(function(window, angular) {
+
+    'use strict';
+
+    angular
+        .module('ksSwiper', []);
+
+})(window, angular);
+
+(function(window, angular) {
+
+    'use strict';
+
+    angular
+        .module('ksSwiper')
+        .provider('angularSwiperConfig', angularSwiperConfig);
+
+    function angularSwiperConfig() {
+        this.params = {
+            slidesPerView   : 1,
+            slidesPerColumn : 1,
+            spaceBetween    : 0,
+            direction       : 'horizontal',
+            loop            : false,
+            initialSlide    : 0,
+            showNavButtons  : false
+        };
+
+        this.setSlidesPerView = function(slidesPerView) {
+            this.params.slidesPerView = slidesPerView;
+        }
+
+        this.addSwiperParameter = function(key, value) {
+            this.params[key] = value;
+        }
+
+        this.setSwiperParameters = function(objKeys) {
+            for (var key in objKeys) {
+                this.params[key] = objKeys[key];
+            }
+        }
+
+        this.$get = function() {
+            return this;
+        };
+    }
+
+})(window, angular);
+
+(function(window, angular) {
+
+    'use strict';
+
+    angular
+        .module('ksSwiper')
+        .directive('ksSwiperContainer', swiperContainerFn)
+        .directive('ksSwiperSlide', swiperSlideFn);
+
+    function createUUID() {
+        // http://www.ietf.org/rfc/rfc4122.txt
+        var s = [];
+        var hexDigits = "0123456789abcdef";
+        for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+
+        var uuid = s.join("");
+        return uuid;
+    }
+
+    /* @ngInject */
+    function swiperContainerFn() {
+        controllerFn.$inject = ["$scope", "$element", "$timeout", "angularSwiperConfig"];
+        return {
+            restrict   : 'E',
+            transclude : true,
+            scope      : {
+                onReady             : '&',
+                onSlideEnd          : '&?',
+                slidesPerView       : '=',
+                slidesPerColumn     : '=',
+                spaceBetween        : '=',
+                parallax            : '=',
+                parallaxTransition  : '@',
+                paginationIsActive  : '=',
+                paginationClickable : '=',
+                showNavButtons      : '=',
+                showScrollBar       : '=',
+                loop                : '=',
+                autoplay            : '=',
+                initialSlide        : '=',
+                containerCls        : '@',
+                wrapperCls          : '@',
+                paginationCls       : '@',
+                slideCls            : '@',
+                direction           : '@',
+                swiper              : '=',
+                overrideParameters  : '='
+            },
+            controller : controllerFn,
+            link       : linkFn,
+
+            template: '<div class="swiper-container {{containerCls}}">' +
+                '<div class="parallax-bg" data-swiper-parallax="{{parallaxTransition}}" ng-show="parallax"></div>' +
+                '<div class="swiper-wrapper {{wrapperCls}}" ng-transclude></div>' +
+                '<div class="swiper-pagination {{paginationCls}}"></div>' +
+                '<div class="swiper-button-next" ng-show="showNavButtons"></div>' +
+                '<div class="swiper-button-prev" ng-show="showNavButtons"></div>' +
+                '<div class="swiper-scrollbar" ng-show="showScrollBar"></div>' +
+                '</div>'
+        };
+
+        /////
+        function controllerFn($scope, $element, $timeout, angularSwiperConfig) {
+            var uuid = createUUID();
+
+            $scope.swiper_uuid = uuid;
+
+            // directive defaults
+            var params = angular.extend({}, angularSwiperConfig, initParams());
+
+            if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
+                params = angular.extend({}, params, {
+                    autoplay: $scope.autoplay
+                });
+            }
+
+            if ($scope.paginationIsActive === true) {
+                params = angular.extend({}, params, {
+                    paginationClickable: $scope.paginationClickable || true,
+                    pagination: '#paginator-' + $scope.swiper_uuid
+                });
+            }
+
+            if ($scope.showNavButtons === true) {
+                params.nextButton = '#nextButton-' + $scope.swiper_uuid;
+                params.prevButton = '#prevButton-' + $scope.swiper_uuid;
+            }
+
+            if ($scope.showScrollBar === true) {
+                params.scrollbar = '#scrollBar-' + $scope.swiper_uuid;
+            }
+
+            if ($scope.overrideParameters) {
+                params = angular.extend({}, params, $scope.overrideParameters);
+            }
+
+            if ($scope.onSlideEnd) {
+                params.onReachEnd = function (swiper){
+                    $scope.onSlideEnd(swiper);
+                };
+            }
+
+            $timeout(function() {
+                var swiper = null;
+
+                if (angular.isObject($scope.swiper)) {
+                    $scope.swiper = new Swiper($element[0].firstChild, params);
+                    swiper = $scope.swiper;
+                } else {
+                    swiper = new Swiper($element[0].firstChild, params);
+                }
+
+                //If specified, calls this function when the swiper object is available
+                if (!angular.isUndefined($scope.onReady)) {
+                    $scope.onReady({
+                        swiper: swiper
+                    });
+                }
+            });
+
+            //// Private
+            function initParams() {
+                var defaults = {};
+                
+                if ($scope.slidesPerView)   { defaults.slidesPerView = $scope.slidesPerView; }
+                if ($scope.slidesPerColumn) { defaults.slidesPerColumn = $scope.slidesPerColumn; }
+                if ($scope.spaceBetween)    { defaults.spaceBetween = $scope.spaceBetween; }
+                if ($scope.direction)       { defaults.direction = $scope.direction; }
+                if ($scope.loop)            { defaults.loop = $scope.loop; }
+                if ($scope.initialSlide)    { defaults.initialSlide = $scope.initialSlide; }
+                if ($scope.showNavButtons)  { defaults.showNavButtons = $scope.showNavButtons; }
+
+                return defaults;
+            }
+        }
+
+        function linkFn(scope, element) {
+
+                var uuid = scope.swiper_uuid;
+
+                var paginatorId  = "paginator-" + uuid;
+                var prevButtonId = "prevButton-" + uuid;
+                var nextButtonId = "nextButton-" + uuid;
+                var scrollBarId  = 'scrollBar-' + uuid;
+
+                var containerElement = element[0];
+
+                angular.element(containerElement.querySelector('.swiper-pagination'))
+                    .attr('id', paginatorId);
+
+                angular.element(containerElement.querySelector('.swiper-button-next'))
+                    .attr('id', nextButtonId);
+
+                angular.element(containerElement.querySelector('.swiper-button-prev'))
+                    .attr('id', prevButtonId);
+
+                angular.element(element[0].querySelector('.swiper-scrollbar'))
+                    .attr('id', scrollBarId);
+            }
+    }
+
+    /* @ngInject */
+    function swiperSlideFn() {
+        return {
+              restrict   : 'E',
+              require    : '^ksSwiperContainer',
+              transclude : true,
+              scope      : {
+                sliderCls : '@',
+                slides    : '='
+              },
+            template: '<div class="swiper-slide {{sliderCls}}" ng-transclude></div>',
+            replace: true
+        };
+    }
+
+})(window, angular);

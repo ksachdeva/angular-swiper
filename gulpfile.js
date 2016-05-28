@@ -26,3 +26,14 @@ gulp.task('dist', function() {
         .pipe(uglify())
         .pipe(gulp.dest('dist'));
 });
+
+gulp.task('dev', function() {
+    return gulp.src([
+            'src/**/*.module.js',
+            'src/**/*.provider.js',
+            'src/**/*.directive.js'
+        ])
+        .pipe(ngAnnotate())
+        .pipe(concat('angular-swiper.js'))
+        .pipe(gulp.dest('dist'));
+});

@@ -1,4 +1,4 @@
-(function(window, angular, undefined) {
+(function(window, angular) {
 
     'use strict';
 
@@ -29,6 +29,7 @@
             transclude : true,
             scope      : {
                 onReady             : '&',
+                onSlideEnd          : '&?',
                 slidesPerView       : '=',
                 slidesPerColumn     : '=',
                 spaceBetween        : '=',
@@ -69,15 +70,7 @@
             $scope.swiper_uuid = uuid;
 
             // directive defaults
-            var params = {
-                slidesPerView   : $scope.slidesPerView || angularSwiperConfig.params.slidesPerView,
-                slidesPerColumn : $scope.slidesPerColumn || angularSwiperConfig.params.slidesPerColumn,
-                spaceBetween    : $scope.spaceBetween || angularSwiperConfig.params.spaceBetween,
-                direction       : $scope.direction || angularSwiperConfig.params.direction,
-                loop            : $scope.loop || angularSwiperConfig.params.loop,
-                initialSlide    : $scope.initialSlide || angularSwiperConfig.params.initialSlide,
-                showNavButtons  : angularSwiperConfig.params.showNavButtons
-            };
+            var params = angular.extend({}, angularSwiperConfig, initParams());
 
             if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
                 params = angular.extend({}, params, {
@@ -105,6 +98,12 @@
                 params = angular.extend({}, params, $scope.overrideParameters);
             }
 
+            if ($scope.onSlideEnd) {
+                params.onReachEnd = function (swiper){
+                    $scope.onSlideEnd();
+                };
+            }
+
             $timeout(function() {
                 var swiper = null;
 
@@ -122,6 +121,21 @@
                     });
                 }
             });
+
+            //// Private
+            function initParams() {
+                var defaults = {};
+                
+                if ($scope.slidesPerView)   { defaults.slidesPerView = $scope.slidesPerView; }
+                if ($scope.slidesPerColumn) { defaults.slidesPerColumn = $scope.slidesPerColumn; }
+                if ($scope.spaceBetween)    { defaults.spaceBetween = $scope.spaceBetween; }
+                if ($scope.direction)       { defaults.direction = $scope.direction; }
+                if ($scope.loop)            { defaults.loop = $scope.loop; }
+                if ($scope.initialSlide)    { defaults.initialSlide = $scope.initialSlide; }
+                if ($scope.showNavButtons)  { defaults.showNavButtons = $scope.showNavButtons; }
+
+                return defaults;
+            }
         }
 
         function linkFn(scope, element) {
@@ -156,11 +170,12 @@
               require    : '^ksSwiperContainer',
               transclude : true,
               scope      : {
-              sliderCls  : '@',
+                sliderCls : '@',
+                slides    : '='
               },
             template: '<div class="swiper-slide {{sliderCls}}" ng-transclude></div>',
             replace: true
         };
     }
 
-})(window, angular, undefined);
+})(window, angular);
