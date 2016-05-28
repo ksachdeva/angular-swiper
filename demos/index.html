@@ -6,34 +6,7 @@
     <title>Demos</title>
 
     <link rel="stylesheet" href="../bower_components/swiper/dist/css/swiper.min.css">
-
-    <style>
-        .myslides {
-            background: #eee;
-            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            color: #000;
-            margin: 0;
-            padding: 0;
-            height: 100px;
-            border-bottom: 1px solid gray;
-        }
-        
-        .swiper-container {
-            width: 100%;
-            height: 100%;
-        }
-        
-        .swiper-slide {
-            text-align: center;
-            font-size: 18px;
-            background: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
-
+    <link rel="stylesheet" href="demo.css">
 </head>
 
 <body>
@@ -41,9 +14,9 @@
     <div ng-app="demoApp">
 
         <div class="myslides">
-            <ks-swiper-container loop="false" show-nav-buttons="false" slides-per-view="4" space-between="5" pagination-clickable="false">
+            <ks-swiper-container>
                 <ks-swiper-slide ng-repeat="s in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
-                    <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
+                    <img ng-src="http://lorempixel.com/600/600/nature/{{s}}">
                 </ks-swiper-slide>
             </ks-swiper-container>
         </div>
@@ -51,30 +24,38 @@
         <div class="myslides">
             <ks-swiper-container loop="false" show-nav-buttons="false" slides-per-view="4" space-between="5" pagination-clickable="false">
                 <ks-swiper-slide>
-                    <img ng-src="http://api.randomuser.me/portraits/thumb/men/1.jpg">
+                    <img ng-src="http://lorempixel.com/600/600/nature/1">
                 </ks-swiper-slide>
                 <ks-swiper-slide>
-                    <img ng-src="http://api.randomuser.me/portraits/thumb/men/2.jpg">
-                </ks-swiper-slide>
-            </ks-swiper-container>
-        </div>
-
-        <div class="myslides">
-            <ks-swiper-container loop="true" show-nav-buttons="true" slides-per-view="4" space-between="5" pagination-clickable="false">
-                <ks-swiper-slide ng-repeat="s in [1,2,3,4,5]">
-                    <img ng-src="http://api.randomuser.me/portraits/thumb/women/{{s}}.jpg">
+                    <img ng-src="http://lorempixel.com/600/600/nature/2">
                 </ks-swiper-slide>
             </ks-swiper-container>
         </div>
 
         <div class="myslides" ng-controller="TestCtrl">
-            <ks-swiper-container autoplay="1000" swiper="swiper" on-ready="onReadySwiper(swiper)">
+            <ks-swiper-container show-nav-buttons="true" slides-per-view="4" space-between="5" on-slide-end="onSlideEnd()">
+                <ks-swiper-slide ng-repeat="s in slides">
+                    <img ng-src="http://lorempixel.com/600/600/nature/{{s}}">
+                </ks-swiper-slide>
+            </ks-swiper-container>
+        </div>
+
+        <div class="myslides">
+            <ks-swiper-container swiper="swiper" on-ready="onReadySwiper(swiper)" on-slide-end="onSlideEnd()">
+                <ks-swiper-slide ng-repeat="s in [1,2,3,4,5]">
+                    <img ng-src="http://lorempixel.com/600/600/nature/{{s}}">
+                </ks-swiper-slide>
+            </ks-swiper-container>
+        </div>
+
+        <!-- <div class="myslides" ng-controller="TestCtrl">
+            <ks-swiper-container autoplay="1000" swiper="swiper" on-ready="onReadySwiper(swiper)" on-slide-end="onSlideEnd()">
                 <ks-swiper-slide ng-repeat="s in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]">
-                    <img ng-src="http://api.randomuser.me/portraits/thumb/men/{{s}}.jpg">
+                    <img ng-src="http://lorempixel.com/600/600/nature/{{s}}">
                 </ks-swiper-slide>
             </ks-swiper-container>
             <button ng-click="next()">Next</button>
-        </div>
+        </div> -->
 
     </div>
 
@@ -84,18 +65,32 @@
 
     <script>
         var module = angular.module('demoApp', ['ksSwiper']);
-        module.controller('TestCtrl', function($scope) {
-            $scope.swiper = {};
-            $scope.next = function() {
-                $scope.swiper.slideNext();
-            };
-            $scope.onReadySwiper = function(swiper) {
-                console.log('onReadySwiper');
-                swiper.on('slideChangeStart', function() {
-                    console.log('slideChangeStart');
+        module
+            .config(function(angularSwiperConfigProvider) {
+                angularSwiperConfigProvider.setSwiperParameters({
+                    slidesPerView : 'auto'
                 });
-            };
-        });
+            })
+            .controller('TestCtrl', function($scope) {
+                $scope.swiper = {};
+                $scope.slides = [1,2,3,4,5];
+
+                $scope.next = function() {
+                    $scope.swiper.slideNext();
+                };
+                $scope.onReadySwiper = function(swiper) {
+                    console.log('onReadySwiper');
+                    swiper.on('slideChangeStart', function() {
+                        console.log('slideChangeStart');
+                    });
+                };
+
+                $scope.onSlideEnd = function(swiper) {
+                    console.log('Last slide');
+                    $scope.slides = [1,2,3,4,5,6,7,8,9,10];
+                    swiper.update();
+                }
+            });
     </script>
 
 </body>

@@ -1,9 +1,10 @@
 'use strict';
 
-var gulp = require('gulp');
-var server = require('gulp-webserver');
+var gulp       = require('gulp');
+var server     = require('gulp-webserver');
 var ngAnnotate = require('gulp-ng-annotate');
-var uglify = require('gulp-uglify');
+var uglify     = require('gulp-uglify');
+var concat     = require('gulp-concat');
 
 gulp.task('serve', function() {
     gulp.src('./')
@@ -15,8 +16,24 @@ gulp.task('serve', function() {
 });
 
 gulp.task('dist', function() {
-    return gulp.src('src/angular-swiper.js')
+    return gulp.src([
+            'src/**/*.module.js',
+            'src/**/*.provider.js',
+            'src/**/*.directive.js'
+        ])
         .pipe(ngAnnotate())
+        .pipe(concat('angular-swiper.js'))
         .pipe(uglify())
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('dev', function() {
+    return gulp.src([
+            'src/**/*.module.js',
+            'src/**/*.provider.js',
+            'src/**/*.directive.js'
+        ])
+        .pipe(ngAnnotate())
+        .pipe(concat('angular-swiper.js'))
         .pipe(gulp.dest('dist'));
 });
