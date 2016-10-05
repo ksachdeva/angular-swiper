@@ -48,7 +48,7 @@
                 swiper: '=',
                 overrideParameters: '='
             },
-            controller: function($scope, $element, $timeout) {
+            controller: ['$scope','$element','$timeout',function($scope, $element, $timeout) {
                 var uuid = createUUID();
 
                 $scope.swiper_uuid = uuid;
@@ -107,7 +107,7 @@
                         });
                     }
                 });
-            },
+            }],
 
             link: function(scope, element) {
 
