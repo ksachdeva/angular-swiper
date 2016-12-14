@@ -38,6 +38,7 @@
                 showNavButtons: '=',
                 showScrollBar: '=',
                 loop: '=',
+                centered: '=',
                 autoplay: '=',
                 initialSlide: '=',
                 containerCls: '@',
@@ -61,7 +62,8 @@
                     direction: $scope.direction || 'horizontal',
                     loop: $scope.loop || false,
                     initialSlide: $scope.initialSlide || 0,
-                    showNavButtons: false
+                    showNavButtons: false,
+                    centeredSlides: $scope.centered || false
                 };
 
                 if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
