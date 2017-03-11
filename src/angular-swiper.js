@@ -46,7 +46,11 @@
                 slideCls: '@',
                 direction: '@',
                 swiper: '=',
-                overrideParameters: '='
+                overrideParameters: '=',
+                numBullets: '=',
+                customBtn: '=',
+                customLeft: '@',
+                customRight: '@'
             },
             controller: function($scope, $element, $timeout) {
                 var uuid = createUUID();
@@ -61,8 +65,28 @@
                     direction: $scope.direction || 'horizontal',
                     loop: $scope.loop || false,
                     initialSlide: $scope.initialSlide || 0,
-                    showNavButtons: false
+                    showNavButtons: false,
+                    observer: true // for dynamic slides to reinitialize the slider by itself
                 };
+                
+                // Added for custom left and right navigation, HTML Params should be the left and right custom classes.
+                if($scope.customBtn === true){
+                	params = angular.extend({}, params, {
+                		nextButton: '.'+$scope.customRight,
+                		prevButton: '.'+$scope.customLeft
+                    });
+                }
+                
+                //Added for pagination bullets.
+                if($scope.numBullets === true){
+                	params = angular.extend({}, params, {
+                		pagination: '.a-num-pagination',
+                		paginationClickable: true,
+                		paginationBulletRender: function (swiper, index, className) {
+                            return '<span class="' + className + '">' + (index + 1) + '</span>';
+                        }
+                    });
+                }
 
                 if (!angular.isUndefined($scope.autoplay) && typeof $scope.autoplay === 'number') {
                     params = angular.extend({}, params, {
